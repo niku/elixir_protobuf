@@ -3,6 +3,8 @@ defmodule Protobuf do
   Documentation for Protobuf.
   """
 
+  import Bitwise
+
   def decode_varint(binary) when is_binary(binary) do
     # See https://developers.google.com/protocol-buffers/docs/encoding#varints
     {bits, rest} = do_decode_varint(binary, <<>>)
@@ -55,5 +57,10 @@ defmodule Protobuf do
       end
 
     {field_number, value, rest2}
+  end
+
+  def decode_zig_zag(n) when is_integer(n) and 0 <= n do
+    # https://developers.google.com/protocol-buffers/docs/encoding#signed-integers
+    (n >>> 1) ^^^ -(n &&& 1)
   end
 end
