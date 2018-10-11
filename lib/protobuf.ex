@@ -14,6 +14,10 @@ defmodule Protobuf do
     {number, rest}
   end
 
+  def decode_fixed64(<<number::64, rest::binary>> = binary) when is_binary(binary) do
+    {number, rest}
+  end
+
   defp do_decode_varint(<<0::1, lower7bits::bitstring-size(7), rest::binary>>, accumulator) do
     {<<lower7bits::bitstring-size(7), accumulator::bitstring>>, rest}
   end
@@ -36,8 +40,8 @@ defmodule Protobuf do
           decode_varint(rest)
 
         1 ->
-          # TODO
-          nil
+          # See https://developers.google.com/protocol-buffers/docs/encoding#non-varint-numbers
+          decode_fixed64(rest)
 
         2 ->
           # TODO
