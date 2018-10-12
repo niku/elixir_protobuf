@@ -14,6 +14,10 @@ defmodule Protobuf do
     {number, rest}
   end
 
+  def decode_fixed32(<<number::32, rest::binary>> = binary) when is_binary(binary) do
+    {number, rest}
+  end
+
   def decode_fixed64(<<number::64, rest::binary>> = binary) when is_binary(binary) do
     {number, rest}
   end
@@ -56,8 +60,8 @@ defmodule Protobuf do
           nil
 
         5 ->
-          # TODO
-          nil
+          # See https://developers.google.com/protocol-buffers/docs/encoding#non-varint-numbers
+          decode_fixed32(rest)
       end
 
     {field_number, value, rest2}
