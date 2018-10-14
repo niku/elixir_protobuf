@@ -30,6 +30,12 @@ defmodule Protobuf do
     do_decode_varint(rest, <<lower7bits::bitstring-size(7), accumulator::bitstring>>)
   end
 
+  def decode_string(binary) when is_binary(binary) do
+    {length_varint, rest} = decode_varint(binary)
+    <<values::binary-size(length_varint), rest2::binary>> = rest
+    {values, rest2}
+  end
+
   def decode_field_number_and_value(binary) when is_binary(binary) do
     # See https://developers.google.com/protocol-buffers/docs/encoding#structure
     {bits, rest} = do_decode_varint(binary, <<>>)
@@ -48,8 +54,8 @@ defmodule Protobuf do
           decode_fixed64(rest)
 
         2 ->
-          # TODO
-          nil
+          # See https://developers.google.com/protocol-buffers/docs/encoding#strings
+          decode_string(rest)
 
         3 ->
           # TODO

@@ -10,6 +10,20 @@ defmodule ProtobufTest do
     sigil_b(term, modifiers)
   end
 
+  def sigil_h(term, _modifiers) do
+    for i <- String.graphemes(term), String.match?(i, ~r/[0-9A-Fa-f]/), into: <<>> do
+      <<_::bitstring-size(4), bits::bitstring-size(4)>> =
+        String.to_integer(i, 16)
+        |> :binary.encode_unsigned()
+
+      bits
+    end
+  end
+
+  def sigil_H(term, modifiers) do
+    sigil_h(term, modifiers)
+  end
+
   describe "decode_varint/1" do
     test "0000_0001 converts to 1" do
       assert {1, <<>>} = Protobuf.decode_varint(~b(0000_0001))
@@ -54,6 +68,12 @@ defmodule ProtobufTest do
 
     test "1111_1111_1111_1111_1111_1111_1111_1111 to 4_294_967_295" do
       assert {4_294_967_295, <<>>} = Protobuf.decode_fixed32(~b(1111_1111_1111_1111_1111_1111_1111_1111))
+    end
+  end
+
+  describe "decode_string/1" do
+    test "07_74_65_73_74_69_6e_67 to testing" do
+      assert {"testing", <<>>} = Protobuf.decode_string(~h(07_74_65_73_74_69_6e_67))
     end
   end
 
