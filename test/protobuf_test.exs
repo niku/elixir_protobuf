@@ -108,4 +108,9 @@ defmodule ProtobufTest do
       assert Protobuf.decode_zig_zag(4_294_967_295) == -2_147_483_648
     end
   end
+
+  test "embedded messages" do
+    rest = ~h(08 96 01)
+    {3, ^rest, <<>>} = Protobuf.decode_field_number_and_value(~h(1a 03 08 96 01))
+  end
 end
