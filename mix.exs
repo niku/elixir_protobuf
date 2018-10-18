@@ -23,7 +23,8 @@ defmodule Protobuf.MixProject do
     [
       {:ex_doc, "~> 0.19.1", only: :dev, runtime: false},
       {:dialyxir, "~> 1.0.0-rc.3", only: :dev, runtime: false},
-      {:credo, "~> 0.10.0", only: :dev, runtime: false}
+      {:credo, "~> 0.10.0", only: :dev, runtime: false},
+      {:ecto, "~> 3.0.0"}
     ]
   end
 end

@@ -24,6 +24,22 @@ defmodule ProtobufTest do
     sigil_h(term, modifiers)
   end
 
+  defmodule MyMessage do
+    use Ecto.Schema
+
+    @primary_key false
+
+    embedded_schema do
+      field(:my_int_field, :integer, default: 0, source: 1)
+      field(:my_string_field, :string, default: "", source: 2)
+    end
+  end
+
+  test "decode/2" do
+    assert %MyMessage{my_int_field: 150, my_string_field: "testing"} =
+             Protobuf.decode(MyMessage, ~h(08_96_01_12_07_74_65_73_74_69_6e_67))
+  end
+
   describe "extract_varint/1" do
     test "0000_0001 is extracted to 000_001" do
       extracted = ~b(000_0001)

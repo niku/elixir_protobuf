@@ -80,6 +80,31 @@ defmodule Protobuf do
     do_extract_field(rest2, [{field_number, value} | fields])
   end
 
+  def decode(message, binary) when is_atom(message) and is_binary(binary) do
+    sources =
+      for field <- message.__schema__(:fields), into: Map.new() do
+        {message.__schema__(:field_source, field), {field, message.__schema__(:type, field)}}
+      end
+
+    fields =
+      extract_field(binary)
+      |> Enum.map(fn {field_number, value} ->
+        {field_name, field_type} = sources[field_number]
+
+        case field_type do
+          :integer ->
+            size = bit_size(value)
+            <<number::integer-size(size)>> = value
+            {field_name, number}
+
+          :string ->
+            {field_name, value}
+        end
+      end)
+
+    struct(message, fields)
+  end
+
   def decode_fixed32(<<number::32, rest::binary>> = binary) when is_binary(binary) do
     {number, rest}
   end
