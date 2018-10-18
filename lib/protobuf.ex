@@ -5,6 +5,18 @@ defmodule Protobuf do
 
   import Bitwise
 
+  def extract_varint(binary) when is_binary(binary) do
+    do_extract_varint(binary, <<>>)
+  end
+
+  defp do_extract_varint(<<0::1, lower7bits::bitstring-size(7), rest::binary>>, accumulator) do
+    {<<lower7bits::bitstring-size(7), accumulator::bitstring>>, rest}
+  end
+
+  defp do_extract_varint(<<1::1, lower7bits::bitstring-size(7), rest::binary>>, accumulator) do
+    do_extract_varint(rest, <<lower7bits::bitstring-size(7), accumulator::bitstring>>)
+  end
+
   def decode_varint(binary) when is_binary(binary) do
     # See https://developers.google.com/protocol-buffers/docs/encoding#varints
     {bits, rest} = do_decode_varint(binary, <<>>)

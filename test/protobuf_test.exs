@@ -24,6 +24,24 @@ defmodule ProtobufTest do
     sigil_h(term, modifiers)
   end
 
+  describe "extract_varint/1" do
+    test "0000_0001 is extracted to 000_001" do
+      extracted = ~b(000_0001)
+      assert {^extracted, <<>>} = Protobuf.extract_varint(~b(0000_0001))
+    end
+
+    test "1010_1100_0000_0010 is extracted to 00_0001_0010_1100" do
+      extracted = ~b(00_0001_0010_1100)
+      assert {^extracted, <<>>} = Protobuf.extract_varint(~b(1010_1100_0000_0010))
+    end
+
+    test "1010_1100_0000_0010_0000_0001 is extracted to 00_0001_0010_1100, and the rest is 0000_0001" do
+      extracted = ~b(00_0001_0010_1100)
+      rest = ~b(0000_0001)
+      assert {^extracted, ^rest} = Protobuf.extract_varint(~b(1010_1100_0000_0010_0000_0001))
+    end
+  end
+
   describe "decode_varint/1" do
     test "0000_0001 converts to 1" do
       assert {1, <<>>} = Protobuf.decode_varint(~b(0000_0001))
