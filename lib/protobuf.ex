@@ -26,6 +26,10 @@ defmodule Protobuf do
     {number, rest}
   end
 
+  def extract_32bit(<<bits::bitstring-size(32), rest::binary>> = binary) when is_binary(binary) do
+    {bits, rest}
+  end
+
   def decode_fixed32(<<number::32, rest::binary>> = binary) when is_binary(binary) do
     {number, rest}
   end
