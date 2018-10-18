@@ -95,6 +95,13 @@ defmodule ProtobufTest do
     end
   end
 
+  describe "extract_field/1" do
+    test "0000_1000_1001_0110_0000_0001 is extracted to [{1, 00_0000_1001_0110}]" do
+      extracted = ~b(00_0000_1001_0110)
+      assert [{1, ^extracted}] = Protobuf.extract_field(~b(0000_1000_1001_0110_0000_0001))
+    end
+  end
+
   describe "decode_varint/1" do
     test "0000_0001 converts to 1" do
       assert {1, <<>>} = Protobuf.decode_varint(~b(0000_0001))

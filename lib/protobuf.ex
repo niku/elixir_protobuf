@@ -40,6 +40,46 @@ defmodule Protobuf do
     {bits, rest2}
   end
 
+  def extract_field(binary) when is_binary(binary) do
+    do_extract_field(binary, [])
+  end
+
+  defp do_extract_field(<<>>, fields), do: fields
+
+  defp do_extract_field(binary, fields) do
+    # See https://developers.google.com/protocol-buffers/docs/encoding#structure
+    {bits, rest} = extract_varint(binary)
+    wire_type_size = 3
+    field_number_size = bit_size(bits) - wire_type_size
+    # Convert from bitstrings to integer
+    <<field_number::integer-size(field_number_size), wire_type::integer-size(wire_type_size)>> = bits
+
+    {value, rest2} =
+      case wire_type do
+        0 ->
+          extract_varint(rest)
+
+        1 ->
+          extract_64bit(rest)
+
+        2 ->
+          extract_length_delimited(rest)
+
+        3 ->
+          # TODO
+          nil
+
+        4 ->
+          # TODO
+          nil
+
+        5 ->
+          extract_32bit(rest)
+      end
+
+    do_extract_field(rest2, [{field_number, value} | fields])
+  end
+
   def decode_fixed32(<<number::32, rest::binary>> = binary) when is_binary(binary) do
     {number, rest}
   end
