@@ -34,6 +34,12 @@ defmodule Protobuf do
     {bits, rest}
   end
 
+  def extract_length_delimited(binary) when is_binary(binary) do
+    {length_varint, rest} = decode_varint(binary)
+    <<bits::binary-size(length_varint), rest2::binary>> = rest
+    {bits, rest2}
+  end
+
   def decode_fixed32(<<number::32, rest::binary>> = binary) when is_binary(binary) do
     {number, rest}
   end

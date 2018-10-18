@@ -76,6 +76,25 @@ defmodule ProtobufTest do
     end
   end
 
+  describe "extract_length_delimited/1" do
+    test "07_74_65_73_74_69_6e_67 is extracted to 74_65_73_74_69_6e_67" do
+      extracted = ~h(74_65_73_74_69_6e_67)
+      assert byte_size(extracted) == 7
+      assert {^extracted, <<>>} = Protobuf.extract_length_delimited(~h(07_74_65_73_74_69_6e_67))
+    end
+
+    test "starting 80_01 means extracting 128 bytes" do
+      bytes =
+        Stream.repeatedly(fn -> "a" end)
+        |> Stream.take(129)
+        |> Enum.join()
+
+      {extracted, rest} = Protobuf.extract_length_delimited(~h(80_01) <> bytes)
+      assert byte_size(extracted) == 128
+      assert byte_size(rest) == 1
+    end
+  end
+
   describe "decode_varint/1" do
     test "0000_0001 converts to 1" do
       assert {1, <<>>} = Protobuf.decode_varint(~b(0000_0001))
