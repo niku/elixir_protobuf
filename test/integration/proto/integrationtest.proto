@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package main;
+
+message Int32Test {
+    int32 value = 1;
+}
+
+message StringTest {
+    string value = 1;
+}

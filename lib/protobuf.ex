@@ -5,6 +5,10 @@ defmodule Protobuf do
 
   import Bitwise
 
+  def decode!(message, binary) do
+    decode(message, binary)
+  end
+
   def extract_varint(binary) when is_binary(binary) do
     do_extract_varint(binary, <<>>)
   end
