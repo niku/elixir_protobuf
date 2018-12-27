@@ -26,7 +26,7 @@ defmodule Protobuf do
     {bits, rest} = do_decode_varint(binary, <<>>)
     bit_size = bit_size(bits)
     # Convert from bitstrings to integer
-    <<number::integer-size(bit_size)>> = bits
+    <<number::signed-integer-size(bit_size)>> = bits
     {number, rest}
   end
 

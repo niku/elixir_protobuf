@@ -126,6 +126,10 @@ defmodule ProtobufTest do
     test "1010_1100_0000_0010 converts to 300" do
       assert {300, <<>>} = Protobuf.decode_varint(~b(1010_1100_0000_0010))
     end
+
+    test "0111_1111 converts to -1" do
+      assert {-1, <<>>} = Protobuf.decode_varint(~b(0111_1111))
+    end
   end
 
   describe "decode_fixed64/1" do
