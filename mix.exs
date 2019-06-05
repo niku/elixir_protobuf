@@ -5,7 +5,7 @@ defmodule Protobuf.MixProject do
     [
       app: :protobuf,
       version: "0.1.0",
-      elixir: "~> 1.7",
+      elixir: "~> 1.9-rc",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -21,11 +21,11 @@ defmodule Protobuf.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, "~> 0.19.1", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.3", only: :dev, runtime: false},
-      {:credo, "~> 0.10.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.20", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.6", only: :dev, runtime: false},
+      {:credo, "~> 1.0", only: :dev, runtime: false},
       {:jason, "~> 1.1", only: [:dev, :test]},
-      {:ecto, "~> 3.0.0"}
+      {:ecto, "~> 3.1"}
     ]
   end
 end
