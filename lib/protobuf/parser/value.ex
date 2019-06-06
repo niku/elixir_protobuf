@@ -19,7 +19,7 @@ defmodule Protobuf.Parser.Value do
     MSB.scan(binary)
   end
 
-  def convert(bitstring, :int32) do
+  def convert(bitstring, :integer) do
     total_size = bit_size(bitstring)
     <<i::size(total_size)>> = bitstring
     {:ok, i}
