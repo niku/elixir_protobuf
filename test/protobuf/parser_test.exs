@@ -11,7 +11,7 @@ defmodule Protobuf.ParserTest do
     @primary_key false
 
     embedded_schema do
-      field(:my_int_field, :integer, default: 0, source: 1)
+      field(:my_int_field, Protobuf.Types.Int32, default: 0, source: 1)
     end
 
     def new do
@@ -25,7 +25,8 @@ defmodule Protobuf.ParserTest do
           {__schema__(:field_source, field), {field, __schema__(:type, field)}}
         end
 
-      Map.fetch(source, key_no)
+      {_field_name, field_type} = Map.get(source, key_no)
+      {:ok, field_type}
     end
 
     def update(proto_message, _key_no, value) do

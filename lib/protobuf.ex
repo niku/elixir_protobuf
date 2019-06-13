@@ -5,6 +5,7 @@ defmodule Protobuf do
 
   import Bitwise
 
+  @spec decode!(atom, binary) :: %{:__struct__ => atom, optional(atom) => any}
   def decode!(message, binary) do
     decode(message, binary)
   end
