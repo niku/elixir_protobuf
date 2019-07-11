@@ -9,9 +9,11 @@ defmodule Protobuf.Parser.Value do
   @end_group 4
   @_32bit 5
 
-  def parse(binary, wire_type_no, value_type) do
+  def parse(binary, wire_type_no)
+      when is_binary(binary) and is_integer(wire_type_no) and
+             wire_type_no in [@varint, @_64bit, @length_delimited, @_32bit] do
     {:ok, bitstring, rest} = scan(binary, wire_type_no)
-    {:ok, value} = convert(bitstring, value_type)
+    {:ok, value} = convert(bitstring, wire_type_no)
     {:ok, value, rest}
   end
 
@@ -19,15 +21,9 @@ defmodule Protobuf.Parser.Value do
     MSB.scan(binary)
   end
 
-  def convert(bitstring, Protobuf.Types.Int32) do
+  def convert(bitstring, @varint) when is_bitstring(bitstring) do
     total_size = bit_size(bitstring)
     <<i::size(total_size)>> = bitstring
     {:ok, i}
-  end
-
-  def convert(bitstring, Protobuf.Types.Sint32) do
-    total_size = bit_size(bitstring)
-    <<i::size(total_size)>> = bitstring
-    {:ok, (i >>> 1) ^^^ -(i &&& 1)}
   end
 end

@@ -34,7 +34,7 @@ defmodule Protobuf.ParserTest do
     end
   end
 
-  test "Protobuf.Parser.parse(00001000_10010110_00000001, proto) returns {:ok, %{1 => 150}}" do
-    assert {:ok, %MyMessage{my_int_field: 150}} = Parser.parse(~b(00001000_10010110_00000001), MyMessage)
+  test "Protobuf.Parser.parse(00001000_10010110_00000001) returns {:ok, %{1 => 150}}" do
+    assert {:ok, %{1 => 150}} = Parser.parse(~b(00001000_10010110_00000001))
   end
 end
