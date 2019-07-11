@@ -14,7 +14,7 @@ defmodule Protobuf.Adapter do
       @message Keyword.get(options, :message)
       @source_field_map Protobuf.Adapter.build_source_field_map(@message)
 
-      alias Protobuf.Parser
+      alias Protobuf.Decoder
 
       @impl Protobuf.Adapter
       def encode(%@message{} = message) do
@@ -22,7 +22,7 @@ defmodule Protobuf.Adapter do
 
       @impl Protobuf.Adapter
       def decode(binary) when is_binary(binary) do
-        {:ok, map} = Parser.parse(binary)
+        {:ok, map} = Decoder.parse(binary)
         message = struct!(@message, Enum.map(map, fn {k, v} -> {@source_field_map[k], v} end))
         {:ok, message}
       end

@@ -1,4 +1,4 @@
-defmodule Protobuf.Parser.MSB do
+defmodule Protobuf.Decoder.MSB do
   @moduledoc false
 
   # Scan bytes which have MSB(Most significant bit)

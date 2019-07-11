@@ -1,5 +1,5 @@
-defmodule Protobuf.Parser.Value do
-  alias Protobuf.Parser.MSB
+defmodule Protobuf.Decoder.Value do
+  alias Protobuf.Decoder.MSB
   use Bitwise
 
   @varint 0

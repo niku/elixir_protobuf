@@ -1,8 +1,8 @@
-defmodule Protobuf.ParserTest do
+defmodule Protobuf.DecoderTest do
   use ExUnit.Case, async: true
   import BitsSigils
 
-  alias Protobuf.Parser
+  alias Protobuf.Decoder
 
   defmodule MyMessage do
     @moduledoc false
@@ -34,7 +34,7 @@ defmodule Protobuf.ParserTest do
     end
   end
 
-  test "Protobuf.Parser.parse(00001000_10010110_00000001) returns {:ok, %{1 => 150}}" do
-    assert {:ok, %{1 => 150}} = Parser.parse(~b(00001000_10010110_00000001))
+  test "Protobuf.Decoder.parse(00001000_10010110_00000001) returns {:ok, %{1 => 150}}" do
+    assert {:ok, %{1 => 150}} = Decoder.parse(~b(00001000_10010110_00000001))
   end
 end

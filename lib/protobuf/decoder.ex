@@ -1,8 +1,8 @@
-defmodule Protobuf.Parser do
+defmodule Protobuf.Decoder do
   @moduledoc false
 
-  alias Protobuf.Parser.Key
-  alias Protobuf.Parser.Value
+  alias Protobuf.Decoder.Key
+  alias Protobuf.Decoder.Value
 
   def parse(binary) when is_binary(binary) do
     do_parse(binary, %{})

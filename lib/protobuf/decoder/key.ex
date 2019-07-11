@@ -1,5 +1,5 @@
-defmodule Protobuf.Parser.Key do
-  alias Protobuf.Parser.MSB
+defmodule Protobuf.Decoder.Key do
+  alias Protobuf.Decoder.MSB
 
   @wire_type_size 3
 
