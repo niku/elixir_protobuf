@@ -17,8 +17,8 @@ defmodule Protobuf.AdapterTest do
   Adapter.define(MyAdapter1, message: MyMessage1)
 
   describe "decode/1" do
-    test "Returns `{:ok, message}`, the message is the struct defined by Adapter" do
-      assert {:ok, %MyMessage1{my_int_field: 150}} = MyAdapter1.decode(~b(00001000_10010110_00000001))
+    test "Returns {:ok, message}, the message is the struct which Adapter defines" do
+      assert {:ok, %MyMessage1{my_int_field: 150}} == MyAdapter1.decode(~b(00001000_10010110_00000001))
     end
   end
 end
