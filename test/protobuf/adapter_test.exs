@@ -4,21 +4,47 @@ defmodule Protobuf.AdapterTest do
 
   alias Protobuf.Adapter
 
-  defmodule MyMessage1 do
-    use Ecto.Schema
+  describe "An adapter which is bound a message having Int32 field" do
+    defmodule MyMessage1 do
+      use Ecto.Schema
 
-    @primary_key false
+      @primary_key false
 
-    embedded_schema do
-      field(:my_int_field, Protobuf.Types.Int32, default: 0, source: 1)
+      embedded_schema do
+        field(:my_int_field, Protobuf.Types.Int32, default: 0, source: 1)
+      end
+    end
+
+    Adapter.define(MyAdapter1, message: MyMessage1)
+
+    test "returns `{:ok, %MyMessage1{my_int_field: 150}}` when it runs decode(00001000_10010110_00000001)" do
+      assert {:ok, %MyMessage1{my_int_field: 150}} == MyAdapter1.decode(~b(00001000_10010110_00000001))
     end
   end
 
-  Adapter.define(MyAdapter1, message: MyMessage1)
+  describe "An adapter which is bound a message having Sint32 field" do
+    defmodule MyMessage2 do
+      use Ecto.Schema
 
-  describe "decode/1" do
-    test "Returns {:ok, message}, the message is the struct which Adapter defines" do
-      assert {:ok, %MyMessage1{my_int_field: 150}} == MyAdapter1.decode(~b(00001000_10010110_00000001))
+      @primary_key false
+
+      embedded_schema do
+        field(:my_int_field, Protobuf.Types.Sint32, default: 0, source: 1)
+      end
+    end
+
+    Adapter.define(MyAdapter2, message: MyMessage2)
+
+    test "returns `{:ok, %MyMessage2{my_int_field: 0}}` when it runs decode(00001000_00000000). It tests the value having all zero bit." do
+      assert {:ok, %MyMessage2{my_int_field: 0}} == MyAdapter2.decode(~b(00001000_00000000))
+    end
+
+    test "returns `{:ok, %MyMessage2{my_int_field: -1}}` when it runs decode(00001000_00000001). It tests the maximum negative integer of Sint32." do
+      assert {:ok, %MyMessage2{my_int_field: -1}} == MyAdapter2.decode(~b(00001000_00000001))
+    end
+
+    test "returns `{:ok, %MyMessage2{my_int_field: 1}}` when it runs decode(00001000_00000010). It tests the minimum positive integer of Sint32." do
+      assert {:ok, %MyMessage2{my_int_field: 1}} == MyAdapter2.decode(~b(00001000_00000010))
     end
   end
 end
