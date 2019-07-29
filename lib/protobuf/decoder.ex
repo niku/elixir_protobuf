@@ -4,17 +4,17 @@ defmodule Protobuf.Decoder do
   alias Protobuf.Decoder.Key
   alias Protobuf.Decoder.Value
 
-  def parse(binary) when is_binary(binary) do
-    do_parse(binary, %{})
+  def decode(binary) when is_binary(binary) do
+    do_decode(binary, %{})
   end
 
-  defp do_parse(<<>>, acc) do
+  defp do_decode(<<>>, acc) do
     {:ok, acc}
   end
 
-  defp do_parse(binary, acc) do
+  defp do_decode(binary, acc) do
     {:ok, key_no, wire_type_no, rest} = Key.parse(binary)
     {:ok, value, rest2} = Value.parse(rest, wire_type_no)
-    do_parse(rest2, Map.put(acc, key_no, value))
+    do_decode(rest2, Map.put(acc, key_no, value))
   end
 end

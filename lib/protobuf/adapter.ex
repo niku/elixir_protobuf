@@ -22,7 +22,7 @@ defmodule Protobuf.Adapter do
 
       @impl Protobuf.Adapter
       def decode(binary) when is_binary(binary) do
-        {:ok, map} = Decoder.parse(binary)
+        {:ok, map} = Decoder.decode(binary)
 
         fields =
           for {key_no, raw_value} <- map, into: [] do

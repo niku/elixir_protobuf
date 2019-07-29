@@ -34,7 +34,7 @@ defmodule Protobuf.DecoderTest do
     end
   end
 
-  test "Protobuf.Decoder.parse(00001000_10010110_00000001) returns {:ok, %{1 => 150}}" do
-    assert {:ok, %{1 => 150}} = Decoder.parse(~b(00001000_10010110_00000001))
+  test "Protobuf.Decoder.decode(00001000_10010110_00000001) returns {:ok, %{1 => 150}}" do
+    assert {:ok, %{1 => 150}} = Decoder.decode(~b(00001000_10010110_00000001))
   end
 end
