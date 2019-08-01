@@ -57,4 +57,62 @@ defmodule Protobuf.AdapterTest do
                MyAdapter2.decode(~b(00001000_11111111_11111111_11111111_11111111_00001111))
     end
   end
+
+  describe "An adapter which is bound a message having String field" do
+    defmodule MyMessage3 do
+      use Ecto.Schema
+
+      @primary_key false
+
+      embedded_schema do
+        field(:my_string_field, Protobuf.Types.String, default: "", source: 1)
+      end
+    end
+
+    Adapter.define(MyAdapter3, message: MyMessage3)
+
+    test "returns `{:ok, %MyMessage3{my_string_field: \"\"}}` when it runs decode(). It tests the default value." do
+      assert {:ok, %MyMessage3{my_string_field: ""}} ==
+               MyAdapter3.decode(<<>>)
+    end
+
+    test "returns `{:ok, %MyMessage3{my_string_field: <<0>>}}` when it runs decode(0x0A_01_00). It tests the minimum value." do
+      assert {:ok, %MyMessage3{my_string_field: <<0>>}} ==
+               MyAdapter3.decode(:binary.encode_unsigned(0x0A_01_00))
+    end
+
+    test "returns `{:ok, %MyMessage3{my_string_field: \"こんにちは\"}}` when it runs decode(0x0A0FE38193E38293E381ABE381A1E381AF). It tests multibyte value." do
+      assert {:ok, %MyMessage3{my_string_field: "こんにちは"}} ==
+               MyAdapter3.decode(:binary.encode_unsigned(0x0A0FE38193E38293E381ABE381A1E381AF))
+    end
+
+    test "returns `{:ok, %MyMessage3{my_string_field: 10 times of \"The quick brown fox jumps over the lazy dog.\"}}`. It tests very long string." do
+      expected_value = String.duplicate("The quick brown fox jumps over the lazy dog.", 10)
+
+      actual_value =
+        <<10, 184, 3, 84, 104, 101, 32, 113, 117, 105, 99, 107, 32, 98, 114, 111, 119, 110, 32, 102, 111, 120, 32, 106,
+          117, 109, 112, 115, 32, 111, 118, 101, 114, 32, 116, 104, 101, 32, 108, 97, 122, 121, 32, 100, 111, 103, 46,
+          84, 104, 101, 32, 113, 117, 105, 99, 107, 32, 98, 114, 111, 119, 110, 32, 102, 111, 120, 32, 106, 117, 109,
+          112, 115, 32, 111, 118, 101, 114, 32, 116, 104, 101, 32, 108, 97, 122, 121, 32, 100, 111, 103, 46, 84, 104,
+          101, 32, 113, 117, 105, 99, 107, 32, 98, 114, 111, 119, 110, 32, 102, 111, 120, 32, 106, 117, 109, 112, 115,
+          32, 111, 118, 101, 114, 32, 116, 104, 101, 32, 108, 97, 122, 121, 32, 100, 111, 103, 46, 84, 104, 101, 32,
+          113, 117, 105, 99, 107, 32, 98, 114, 111, 119, 110, 32, 102, 111, 120, 32, 106, 117, 109, 112, 115, 32, 111,
+          118, 101, 114, 32, 116, 104, 101, 32, 108, 97, 122, 121, 32, 100, 111, 103, 46, 84, 104, 101, 32, 113, 117,
+          105, 99, 107, 32, 98, 114, 111, 119, 110, 32, 102, 111, 120, 32, 106, 117, 109, 112, 115, 32, 111, 118, 101,
+          114, 32, 116, 104, 101, 32, 108, 97, 122, 121, 32, 100, 111, 103, 46, 84, 104, 101, 32, 113, 117, 105, 99,
+          107, 32, 98, 114, 111, 119, 110, 32, 102, 111, 120, 32, 106, 117, 109, 112, 115, 32, 111, 118, 101, 114, 32,
+          116, 104, 101, 32, 108, 97, 122, 121, 32, 100, 111, 103, 46, 84, 104, 101, 32, 113, 117, 105, 99, 107, 32, 98,
+          114, 111, 119, 110, 32, 102, 111, 120, 32, 106, 117, 109, 112, 115, 32, 111, 118, 101, 114, 32, 116, 104, 101,
+          32, 108, 97, 122, 121, 32, 100, 111, 103, 46, 84, 104, 101, 32, 113, 117, 105, 99, 107, 32, 98, 114, 111, 119,
+          110, 32, 102, 111, 120, 32, 106, 117, 109, 112, 115, 32, 111, 118, 101, 114, 32, 116, 104, 101, 32, 108, 97,
+          122, 121, 32, 100, 111, 103, 46, 84, 104, 101, 32, 113, 117, 105, 99, 107, 32, 98, 114, 111, 119, 110, 32,
+          102, 111, 120, 32, 106, 117, 109, 112, 115, 32, 111, 118, 101, 114, 32, 116, 104, 101, 32, 108, 97, 122, 121,
+          32, 100, 111, 103, 46, 84, 104, 101, 32, 113, 117, 105, 99, 107, 32, 98, 114, 111, 119, 110, 32, 102, 111,
+          120, 32, 106, 117, 109, 112, 115, 32, 111, 118, 101, 114, 32, 116, 104, 101, 32, 108, 97, 122, 121, 32, 100,
+          111, 103, 46>>
+
+      assert {:ok, %MyMessage3{my_string_field: expected_value}} ==
+               MyAdapter3.decode(actual_value)
+    end
+  end
 end
