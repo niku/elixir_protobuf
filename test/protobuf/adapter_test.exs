@@ -17,6 +17,10 @@ defmodule Protobuf.AdapterTest do
 
     Adapter.define(MyAdapter1, message: MyMessage1)
 
+    test "returns `{:ok, %MyMessage1{my_int_field: 0}}` when it runs decode(<<>>). It tests the default value." do
+      assert {:ok, %MyMessage1{my_int_field: 0}} == MyAdapter1.decode(<<>>)
+    end
+
     test "returns `{:ok, %MyMessage1{my_int_field: 150}}` when it runs decode(00001000_10010110_00000001)" do
       assert {:ok, %MyMessage1{my_int_field: 150}} == MyAdapter1.decode(~b(00001000_10010110_00000001))
     end
@@ -35,8 +39,8 @@ defmodule Protobuf.AdapterTest do
 
     Adapter.define(MyAdapter2, message: MyMessage2)
 
-    test "returns `{:ok, %MyMessage2{my_int_field: 0}}` when it runs decode(00001000_00000000). It tests the value having all zero bit of Sint32." do
-      assert {:ok, %MyMessage2{my_int_field: 0}} == MyAdapter2.decode(~b(00001000_00000000))
+    test "returns `{:ok, %MyMessage2{my_int_field: 0}}` when it runs decode(<<>>). It tests the default value." do
+      assert {:ok, %MyMessage2{my_int_field: 0}} == MyAdapter2.decode(<<>>)
     end
 
     test "returns `{:ok, %MyMessage2{my_int_field: -1}}` when it runs decode(00001000_00000001). It tests the maximum negative integer of Sint32." do
