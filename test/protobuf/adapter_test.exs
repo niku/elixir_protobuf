@@ -21,8 +21,24 @@ defmodule Protobuf.AdapterTest do
       assert {:ok, %MyMessage1{my_int_field: 0}} == MyAdapter1.decode(<<>>)
     end
 
-    test "returns `{:ok, %MyMessage1{my_int_field: 150}}` when it runs decode(00001000_10010110_00000001)" do
-      assert {:ok, %MyMessage1{my_int_field: 150}} == MyAdapter1.decode(~b(00001000_10010110_00000001))
+    test "returns `{:ok, %MyMessage1{my_int_field: -1}}` when it runs decode(08_80_80_80_80_F8_FF_FF_FF_FF_01). It tests the minimum negative integer of Int32." do
+      assert {:ok, %MyMessage1{my_int_field: -2_147_483_648}} ==
+               MyAdapter1.decode(:binary.encode_unsigned(0x08_80_80_80_80_F8_FF_FF_FF_FF_01))
+    end
+
+    test "returns `{:ok, %MyMessage1{my_int_field: -1}}` when it runs decode(08_FF_FF_FF_FF_FF_FF_FF_FF_FF_01). It tests the maximum negative integer of Int32." do
+      assert {:ok, %MyMessage1{my_int_field: -1}} ==
+               MyAdapter1.decode(:binary.encode_unsigned(0x08_FF_FF_FF_FF_FF_FF_FF_FF_FF_01))
+    end
+
+    test "returns `{:ok, %MyMessage1{my_int_field: 1}}` when it runs decode(00001000_00000001). It tests the minimum positive integer of Int32." do
+      assert {:ok, %MyMessage1{my_int_field: 1}} ==
+               MyAdapter1.decode(~b(00001000_00000001))
+    end
+
+    test "returns `{:ok, %MyMessage1{my_int_field: 1}}` when it runs decode(00001000_00000001). It tests the maximum positive integer of Int32." do
+      assert {:ok, %MyMessage1{my_int_field: 2_147_483_647}} ==
+               MyAdapter1.decode(:binary.encode_unsigned(0x08_FF_FF_FF_FF_07))
     end
   end
 
