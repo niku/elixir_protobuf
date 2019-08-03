@@ -14,6 +14,7 @@ defmodule Protobuf.Adapter do
       @message Keyword.get(options, :message)
       @source Protobuf.Adapter.build_source(@message)
 
+      alias Ecto.Type
       alias Protobuf.Decoder
 
       @impl Protobuf.Adapter
@@ -27,7 +28,7 @@ defmodule Protobuf.Adapter do
         fields =
           for {key_no, raw_value} <- map, into: [] do
             {field_name, field_type} = @source[key_no]
-            {:ok, loaded_value} = field_type.load(raw_value)
+            {:ok, loaded_value} = Type.load(field_type, raw_value)
             {field_name, loaded_value}
           end
 
