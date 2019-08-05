@@ -18,7 +18,7 @@ defmodule Protobuf.Adapter do
       alias Protobuf.Decoder
 
       @impl Protobuf.Adapter
-      def encode(%@message{} = message) do
+      def encode(%@message{} = _message) do
       end
 
       @impl Protobuf.Adapter
