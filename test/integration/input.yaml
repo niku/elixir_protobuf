@@ -1,7 +1,21 @@
 int32:
-  - 0
-  - 1
+  - description: the default value
+    value: 0
+  - description: the minimum negative integer
+    value: -2_147_483_648
+  - description: the maximum negative integer
+    value: -1
+  - description: the minimum positive integer
+    value: 1
+  - description: the maximum positive integer
+    value: 2_147_483_647
 
 string:
-  - "hello world"
-  - "こんにちは"
+  - description: the default value
+    value: ""
+  - description: multibyte value
+    value: "こんにちは"
+  - description: long value
+    value: |
+      Elixir is a dynamic, functional language designed for building scalable and maintainable applications.
+      Elixir leverages the Erlang VM, known for running low-latency, distributed and fault-tolerant systems, while also being successfully used in web development and the embedded software domain.

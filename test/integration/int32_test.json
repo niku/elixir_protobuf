@@ -1,1 +1,22 @@
-{"0": "", "1": "CAE="}
+{
+  "the default value": {
+    "decoded": 0,
+    "encoded": ""
+  },
+  "the minimum negative integer": {
+    "decoded": -2147483648,
+    "encoded": "CICAgID4/////wE="
+  },
+  "the maximum negative integer": {
+    "decoded": -1,
+    "encoded": "CP///////////wE="
+  },
+  "the minimum positive integer": {
+    "decoded": 1,
+    "encoded": "CAE="
+  },
+  "the maximum positive integer": {
+    "decoded": 2147483647,
+    "encoded": "CP////8H"
+  }
+}

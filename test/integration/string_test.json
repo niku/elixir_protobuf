@@ -1,1 +1,14 @@
-{"hello world": "CgtoZWxsbyB3b3JsZA==", "\u3053\u3093\u306b\u3061\u306f": "Cg/jgZPjgpPjgavjgaHjga8="}
+{
+  "the default value": {
+    "decoded": "",
+    "encoded": ""
+  },
+  "multibyte value": {
+    "decoded": "\u3053\u3093\u306b\u3061\u306f",
+    "encoded": "Cg/jgZPjgpPjgavjgaHjga8="
+  },
+  "long value": {
+    "decoded": "Elixir is a dynamic, functional language designed for building scalable and maintainable applications.\nElixir leverages the Erlang VM, known for running low-latency, distributed and fault-tolerant systems, while also being successfully used in web development and the embedded software domain.\n",
+    "encoded": "CqYCRWxpeGlyIGlzIGEgZHluYW1pYywgZnVuY3Rpb25hbCBsYW5ndWFnZSBkZXNpZ25lZCBmb3IgYnVpbGRpbmcgc2NhbGFibGUgYW5kIG1haW50YWluYWJsZSBhcHBsaWNhdGlvbnMuCkVsaXhpciBsZXZlcmFnZXMgdGhlIEVybGFuZyBWTSwga25vd24gZm9yIHJ1bm5pbmcgbG93LWxhdGVuY3ksIGRpc3RyaWJ1dGVkIGFuZCBmYXVsdC10b2xlcmFudCBzeXN0ZW1zLCB3aGlsZSBhbHNvIGJlaW5nIHN1Y2Nlc3NmdWxseSB1c2VkIGluIHdlYiBkZXZlbG9wbWVudCBhbmQgdGhlIGVtYmVkZGVkIHNvZnR3YXJlIGRvbWFpbi4K"
+  }
+}

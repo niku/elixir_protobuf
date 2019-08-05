@@ -24,8 +24,14 @@ def read_in(in_filepath):
 
 
 def write_out(inputs, making_func, out_filepath):
-    result = {x: base64.b64encode(making_func(x).SerializeToString()).decode('ascii') for x in inputs}
-    json_string = json.dumps(result)
+    result = {
+        input['description']: {
+            'decoded': input['value'],
+            'encoded': base64.b64encode(making_func(input['value']).SerializeToString()).decode('ascii')
+        }
+        for input in inputs
+    }
+    json_string = json.dumps(result, indent=2)
 
     f = open(out_filepath, 'w')
     f.write(json_string)
